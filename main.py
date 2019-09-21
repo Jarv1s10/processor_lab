@@ -4,10 +4,6 @@ import random
 import keyboard
 
 
-with open('source.txt') as file:
-    contents = file.readlines()
-
-
 class Process:
     def __init__(self):
         self.r1 = random.randint(0, 50)
@@ -16,10 +12,19 @@ class Process:
         self.ps = '+'
 
     def info(self, command):
+
         keyboard.wait('enter')
+        """
         print('IR: ' + ' '.join(command), 'R1: ' + binary_repr(self.r1, width=12),
               'R2: ' + binary_repr(self.r2, width=12),
               'PS: ' + str(self.ps), 'PC: ' + str(self.pc), 'TC: ' + str(self.tc), sep='\n', end='\n\n')
+        """
+        pt = PrettyTable()
+        col_names=['elements', 'status']
+        pt.add_column(col_names[0], ['IR: ', 'R1: ', 'R2: ', 'PS: ', 'PC: ', 'TC: '])
+        pt.add_column(col_names[1], [' '.join(command), binary_repr(self.r1, width=12), binary_repr(self.r2, width=12),
+                       str(self.ps), str(self.pc), str(self.tc)])
+        print(pt, end='\n\n')
 
     def mov(self, command):
         self.tc = 1
@@ -55,7 +60,9 @@ class Process:
             self.add(cmnd)
 
 
+with open('source.txt') as file:
+    contents = file.readlines()
+
 prc = Process()
 for line in contents:
-    print(line)
     prc.command(line.split())
